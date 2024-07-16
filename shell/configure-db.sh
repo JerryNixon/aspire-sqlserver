@@ -32,9 +32,17 @@ if [[ $dbstatus -ne 0 ]] || [[ $errcode -ne 0 ]]; then
     exit 1
 fi
 
-# Loop through the .sql files in the /docker-entrypoint-initdb.d and execute them with sqlcmd
-for f in /docker-entrypoint-initdb.d/*.sql
-do
+# Loop through the .sql files in the root of /docker-entrypoint-initdb.d and execute them with sqlcmd
+for f in $(find /docker-entrypoint-initdb.d -maxdepth 1 -type f -name "*.sql" | sort); do
     echo "Processing $f file..."
     /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -d master -i "$f"
+done
+
+# Loop through each subdirectory in /docker-entrypoint-initdb.d
+for dir in $(find /docker-entrypoint-initdb.d -mindepth 1 -maxdepth 1 -type d | sort); do
+    # Loop through the .sql files in each subdirectory and execute them with sqlcmd
+    for f in $(find "$dir" -maxdepth 1 -type f -name "*.sql" | sort); do
+        echo "Processing $f file in directory $dir..."
+        /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$MSSQL_SA_PASSWORD" -d master -i "$f"
+    done
 done
