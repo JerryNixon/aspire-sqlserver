@@ -1,4 +1,6 @@
-﻿using HealthChecks.SqlServer;
+﻿using Aspire.Hosting;
+
+using HealthChecks.SqlServer;
 
 namespace Jerry.Aspire.Hosting.SqlServer;
 
@@ -35,20 +37,14 @@ public static class SqlServerExtensions
 
         if (shellDirectory.GetFiles().Length == 0)
         {
-            File.WriteAllText(path: Path.Combine(shellDirectory.FullName, "configure-db.sh"),
-                              contents: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "configure-db.sh"));
+            new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "configure-db.sh"))
+                .CopyTo(Path.Combine(shellDirectory.FullName, "configure-db.sh"));
 
-            File.WriteAllText(path: Path.Combine(shellDirectory.FullName, "entrypoint.sh"),
-                              contents: Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "configure-db.sh"));
+            new FileInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "configure-db.sh"))
+                .CopyTo(Path.Combine(shellDirectory.FullName, "entrypoint.sh"));
         }
 
         var startDirectory = builder.ServerStartupDirectory();
-
-        if (startDirectory.GetFiles().Length == 0)
-        {
-            File.WriteAllText(path: Path.Combine(startDirectory.FullName, "init.sql"),
-                              contents: "SELECT 1;");
-        }
 
         return builder
             .WithBindMount(shellDirectory.FullName, "/usr/config")

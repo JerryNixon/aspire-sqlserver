@@ -8,9 +8,9 @@ internal static class SqlUtilityExtensions
 
         EnsureGitIgnore(appRootPath);
 
-        return Directory.CreateDirectory(appRootPath); 
+        return Directory.CreateDirectory(appRootPath);
 
-        void EnsureGitIgnore(string path)
+        static void EnsureGitIgnore(string path)
         {
             var gitignore = Path.Combine(path, "../.gitignore");
 
@@ -31,7 +31,14 @@ internal static class SqlUtilityExtensions
     {
         var rootDirectory = builder.AppRootDirectory();
 
-        var serverPath = Path.Combine(rootDirectory.FullName, builder.Resource.Name);
+        var serverName = builder.Resource switch
+        {
+            SqlServerDatabaseResource db => db.Parent.Name,
+            SqlServerServerResource server => server.Name,
+            _ => throw new ArgumentOutOfRangeException(nameof(builder.Resource))
+        };
+
+        var serverPath = Path.Combine(rootDirectory.FullName, serverName);
 
         return Directory.CreateDirectory(serverPath);
     }
@@ -66,24 +73,5 @@ internal static class SqlUtilityExtensions
         }
 
         return Directory.CreateDirectory(startupPath);
-    }
-
-    public enum ContentType { ConfigureDbSh, EntrypointSh }
-
-    public static string ReadDefaultContent(ContentType content)
-    {
-        var path = content switch
-        {
-            ContentType.ConfigureDbSh => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "configure-db.sh"),
-            ContentType.EntrypointSh => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Content", "entrypoint.sh"),
-            _ => throw new ArgumentOutOfRangeException(nameof(content))
-        };
-
-        if (!File.Exists(path))
-        {
-            throw new FileNotFoundException($"File not found: {path}");
-        }
-
-        return File.ReadAllText(path);
     }
 }
