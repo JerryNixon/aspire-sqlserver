@@ -5,14 +5,11 @@ var sqlServer = builder
     .AddSqlServer("sql", sqlPassword, port: 1234)
     .WithDataVolume("MyDataVolume")
     .WithHealthCheck();
+
 var sqlDatabase = sqlServer.AddDatabase("Database");
 
-var sqlShell = "./sql-server";
-var sqlScript = "../Database/sql";
-sqlServer
-    .WithBindMount(sqlShell, target: "/usr/config")
-    .WithBindMount(sqlScript, target: "/docker-entrypoint-initdb.d")
-    .WithEntrypoint("/usr/config/entrypoint.sh");
+var sqlProject = builder.AddSqlProject<Projects.Database>("databaseProject")
+    .PublishTo(sqlDatabase);
 
 var dabConfig = "./data-api/dab-config.json";
 var dabServer = builder
