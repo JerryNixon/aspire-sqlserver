@@ -1,0 +1,240 @@
+{
+  "$schema": "https://github.com/Azure/data-api-builder/releases/download/v1.1.7/dab.draft.schema.json",
+  "data-source": {
+    "database-type": "mssql",
+    "connection-string": "@env('my-connection-string')",
+    "options": {
+      "set-session-context": false
+    }
+  },
+  "runtime": {
+    "rest": {
+      "enabled": true,
+      "path": "/api",
+      "request-body-strict": true
+    },
+    "graphql": {
+      "enabled": true,
+      "path": "/graphql",
+      "allow-introspection": true
+    },
+    "host": {
+      "cors": {
+        "origins": [],
+        "allow-credentials": false
+      },
+      "authentication": {
+        "provider": "Simulator"
+      },
+      "mode": "development"
+    },
+    "cache": {
+      "enabled": true,
+      "ttl-seconds": 60
+    }
+  },
+  "entities": {
+    "Actor": {
+      "source": {
+        "object": "[dbo].[Actor]",
+        "type": "table"
+      },
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "Actor",
+          "plural": "Actors"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            "*"
+          ]
+        }
+      ],
+      "relationships": {
+        "character": {
+          "cardinality": "many",
+          "target.entity": "Character",
+          "source.fields": [
+            "Id"
+          ],
+          "target.fields": [
+            "ActorId"
+          ],
+          "linking.source.fields": [],
+          "linking.target.fields": []
+        }
+      }
+    },
+    "Character": {
+      "source": {
+        "object": "[dbo].[Character]",
+        "type": "table"
+      },
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "Character",
+          "plural": "Characters"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "*"
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "actor": {
+          "cardinality": "one",
+          "target.entity": "Actor",
+          "source.fields": [
+            "ActorId"
+          ],
+          "target.fields": [
+            "Id"
+          ],
+          "linking.source.fields": [],
+          "linking.target.fields": []
+        },
+        "species": {
+          "cardinality": "many",
+          "target.entity": "Species",
+          "source.fields": [
+            "Id"
+          ],
+          "target.fields": [
+            "Id"
+          ],
+          "linking.object": "dbo.character_species",
+          "linking.source.fields": [
+            "CharacterId"
+          ],
+          "linking.target.fields": [
+            "SpeciesId"
+          ]
+        },
+        "series": {
+          "cardinality": "many",
+          "target.entity": "Series",
+          "source.fields": [
+            "Id"
+          ],
+          "target.fields": [
+            "Id"
+          ],
+          "linking.object": "dbo.series_character",
+          "linking.source.fields": [
+            "CharacterId"
+          ],
+          "linking.target.fields": [
+            "SeriesId"
+          ]
+        }
+      }
+    },
+    "Series": {
+      "source": {
+        "object": "[dbo].[Series]",
+        "type": "table"
+      },
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "Series",
+          "plural": "Series"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "*"
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "character": {
+          "cardinality": "many",
+          "target.entity": "Character",
+          "source.fields": [
+            "Id"
+          ],
+          "target.fields": [
+            "Id"
+          ],
+          "linking.object": "dbo.series_character",
+          "linking.source.fields": [
+            "SeriesId"
+          ],
+          "linking.target.fields": [
+            "CharacterId"
+          ]
+        }
+      }
+    },
+    "Species": {
+      "source": {
+        "object": "[dbo].[Species]",
+        "type": "table"
+      },
+      "graphql": {
+        "enabled": true,
+        "type": {
+          "singular": "Species",
+          "plural": "Species"
+        }
+      },
+      "rest": {
+        "enabled": true
+      },
+      "permissions": [
+        {
+          "role": "anonymous",
+          "actions": [
+            {
+              "action": "*"
+            }
+          ]
+        }
+      ],
+      "relationships": {
+        "character": {
+          "cardinality": "many",
+          "target.entity": "Character",
+          "source.fields": [
+            "Id"
+          ],
+          "target.fields": [
+            "Id"
+          ],
+          "linking.object": "dbo.character_species",
+          "linking.source.fields": [
+            "SpeciesId"
+          ],
+          "linking.target.fields": [
+            "CharacterId"
+          ]
+        }
+      }
+    }
+  }
+}
