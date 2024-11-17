@@ -1,0 +1,2 @@
+﻿CREATE VIEW Info AS
+SELECT CONVERT(VARCHAR, DATABASEPROPERTYEX(DB_NAME(), 'Updateability')) as ServerInfo;
