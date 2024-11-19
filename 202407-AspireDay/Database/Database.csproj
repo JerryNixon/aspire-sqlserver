@@ -1,0 +1,12 @@
+﻿<Project Sdk="MSBuild.Sdk.SqlProj/2.7.1">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <SqlServerVersion>SqlAzure</SqlServerVersion>
+    </PropertyGroup>
+
+   <ItemGroup>
+    <PostDeploy Include="Post-Deployment\Script.PostDeployment.sql" />
+  </ItemGroup>
+
+
+</Project>
