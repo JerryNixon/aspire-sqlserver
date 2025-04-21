@@ -1,0 +1,50 @@
+@AlphaDynamics.WebApi_HostAddress = http://localhost:5177
+
+### Get all crew
+GET {{AlphaDynamics.WebApi_HostAddress}}/api/crew
+Accept: application/json
+
+###
+
+### Get all equipment
+GET {{AlphaDynamics.WebApi_HostAddress}}/api/equipment
+Accept: application/json
+
+###
+
+### Get all transactions (with includes)
+GET {{AlphaDynamics.WebApi_HostAddress}}/api/transaction
+Accept: application/json
+
+###
+
+### Post new crew
+POST {{AlphaDynamics.WebApi_HostAddress}}/api/crew
+Content-Type: application/json
+
+{
+  "name": "Alex Renner"
+}
+
+###
+
+### Post new equipment
+POST {{AlphaDynamics.WebApi_HostAddress}}/api/equipment
+Content-Type: application/json
+
+{
+  "name": "Pressure Regulator"
+}
+
+###
+
+### Post new transaction
+POST {{AlphaDynamics.WebApi_HostAddress}}/api/transaction
+Content-Type: application/json
+
+{
+  "crewId": 1,
+  "equipmentId": 2,
+  "operationId": 1,
+  "date": "2025-04-18T14:00:00Z"
+}
