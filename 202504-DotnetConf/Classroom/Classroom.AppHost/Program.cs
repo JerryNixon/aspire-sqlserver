@@ -3,7 +3,7 @@ var builder = DistributedApplication.CreateBuilder(args);
 var sqlDatabase = builder.AddConnectionString("SqlServer");
 
 var dabConfig = "./dab-config.json";
-var dabApi = builder.AddDataAPIBuilder("data-api", dabConfig)
+var dabApi = builder.AddDataAPIBuilder("data-api", 1234, dabConfig)
     .WithHttpHealthCheck("/api/Classes")
     .WithReference(sqlDatabase);
 
