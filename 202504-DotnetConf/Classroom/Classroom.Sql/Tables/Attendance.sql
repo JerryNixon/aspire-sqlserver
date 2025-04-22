@@ -1,0 +1,7 @@
+﻿CREATE TABLE Attendance (
+    Id INT PRIMARY KEY,
+    ClassId INT NOT NULL FOREIGN KEY REFERENCES Classes(Id),
+    StudentId INT NOT NULL FOREIGN KEY REFERENCES Students(Id),
+    Date DATE NOT NULL,
+    Present BIT NOT NULL
+);

@@ -1,0 +1,6 @@
+dotnet ef migrations add InitialCreate --project Classroom.Api.Repository
+dotnet ef database update --project Classroom.Api.Repository
+
+dotnet ef migrations add SeedData --project Classroom.Api.Repository
+dotnet ef database update --project Classroom.Api.Repository
+

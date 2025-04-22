@@ -1,0 +1,5 @@
+﻿CREATE TABLE Students (
+    Id INT PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
+    ClassId INT NOT NULL FOREIGN KEY REFERENCES Classes(Id)
+);

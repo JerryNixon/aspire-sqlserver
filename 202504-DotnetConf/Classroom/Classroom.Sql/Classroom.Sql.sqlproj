@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build">
+  <Sdk Name="Microsoft.Build.Sql" Version="1.0.0" />
+  <PropertyGroup>
+    <Name>Classroom.Sql</Name>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql160DatabaseSchemaProvider</DSP>
+    <ModelCollation>1033, CI</ModelCollation>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{f55c5fda-501c-45d1-a0ba-6d352730a73c}</ProjectGuid>
+  </PropertyGroup>
+  <ItemGroup>
+    <Build Include="Tables\Students.sql" />
+    <Build Include="Tables\Classes.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tables" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\Attendance.sql" />
+  </ItemGroup>
+</Project>

@@ -1,39 +1,61 @@
-var builder = WebApplication.CreateBuilder(args);
+using Classroom.Api.Repository;
+using Classroom.Poco;
 
-// Add services to the container.
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddScoped<ClassroomRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.MapGet("/students", async (int? classId, ClassroomRepository repo) =>
 {
-    app.MapOpenApi();
-}
+    var all = await repo.GetStudents();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+    if (classId.HasValue)
+    {
+        return Results.Ok(all.Where(s => s.ClassId == classId.Value).ToList());
+    }
 
-app.MapGet("/weatherforecast", () =>
+    return Results.Ok(all);
+});
+
+app.MapGet("/classes", async (ClassroomRepository repo) =>
 {
-    var forecast =  Enumerable.Range(1, 5).Select(index =>
-        new WeatherForecast
-        (
-            DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-            Random.Shared.Next(-20, 55),
-            summaries[Random.Shared.Next(summaries.Length)]
-        ))
-        .ToArray();
-    return forecast;
-})
-.WithName("GetWeatherForecast");
+    var result = await repo.GetClasses();
+    return Results.Ok(result);
+});
+
+app.MapGet("/attendance", async (int? classId, DateOnly? startDate, DateOnly? endDate, ClassroomRepository repo) =>
+{
+    var all = await repo.GetAttendance();
+
+    if (classId.HasValue)
+    {
+        all = all.Where(a => a.ClassId == classId.Value).ToList();
+    }
+
+    if (startDate.HasValue)
+    {
+        all = all.Where(a => a.Date >= startDate.Value).ToList();
+    }
+
+    if (endDate.HasValue)
+    {
+        all = all.Where(a => a.Date <= endDate.Value).ToList();
+    }
+
+    return Results.Ok(all);
+});
+
+app.MapPost("/attendance", async (AttendancePoco record, ClassroomRepository repo) =>
+{
+    var result = await repo.AddAttendance(record);
+    return Results.Created($"/attendance/{result.Id}", result);
+});
+
+app.MapPut("/attendance/{attendanceId}", async (int attendanceId, AttendancePoco input, ClassroomRepository repo) =>
+    await repo.UpdateAttendance(attendanceId, input) ? Results.NoContent() : Results.NotFound());
+
+app.MapDelete("/attendance/{attendanceId}", async (int attendanceId, ClassroomRepository repo) =>
+    await repo.DeleteAttendance(attendanceId) ? Results.NoContent() : Results.NotFound());
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}
