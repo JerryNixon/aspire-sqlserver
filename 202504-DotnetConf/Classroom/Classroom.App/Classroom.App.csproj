@@ -1,23 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <Compile Include="..\Classroom.App.Client\ClassroomApiClient.cs" Link="Client\ClassroomApiClient.cs" />
-        <Compile Include="..\Classroom.App.Client\ClassroomDabClient.cs" Link="Client\ClassroomDabClient.cs" />
-        <Compile Include="..\Classroom.App.Client\IClassroomClient.cs" Link="Client\IClassroomClient.cs" />
-        <Compile Include="..\Classroom.App.Client\Models.cs" Link="Client\Models.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.4" />
         <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="9.0.4" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="9.0.4" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Client\" />
-    </ItemGroup>
-
-    <ItemGroup>
+        <ProjectReference Include="..\Classroom.App.Client\Classroom.App.Client.csproj" />
         <ProjectReference Include="..\Classroom.Poco\Classroom.Poco.csproj" />
     </ItemGroup>
 

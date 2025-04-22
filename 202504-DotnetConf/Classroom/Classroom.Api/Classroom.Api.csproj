@@ -7,21 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\Classroom.Api.Repository\ClassroomContext.cs" Link="Repository\ClassroomContext.cs" />
-    <Compile Include="..\Classroom.Api.Repository\ClassroomRepository.cs" Link="Repository\ClassroomRepository.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="..\Classroom.Api.Repository\Commands.txt" Link="Repository\Commands.txt" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Classroom.Api.Repository\Classroom.Api.Repository.csproj" />
     <ProjectReference Include="..\Classroom.Poco\Classroom.Poco.csproj" />
   </ItemGroup>
 
